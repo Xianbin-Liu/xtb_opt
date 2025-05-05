@@ -29,6 +29,10 @@ ${xtb_path} conf.xyz -c "$b" --uhf 0  -o > tempfile.txt 2>&1
 ```
 
 # prepare conf
-将`.`连接的smiles分割，分别作canonical得到所有需要初始化构象的smiles（去除atom mapping以减少重复），smiles2conf保存smiles到conf path的映射关系。
+将`.`连接的smiles分割，分别作canonical得到所有需要初始化构象的smiles（去除atom mapping以减少重复），smiles2conf保存cano smiles到conf path的映射关系。
 
-load conf和prepare过程保持一致，分割 - 取得cano的smiles - 计算connection mask - 取得conf - 补上reactants中缺少的atom mapping
+# load conf
+
+`utils.py`
+
+load conf和prepare过程保持一致，对整个`input smiles`按`.`分割 - 取得cano的smiles后计算带am的“有效原子”个数 - 计算不同部分的connection mask - 取得conf - （如果需要addHs） 将xyz以及分部分load的分子，对它们的原子次序rerank成`MolFromSmiles(input smiles)`的次序
